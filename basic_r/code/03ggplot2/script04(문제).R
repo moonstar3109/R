@@ -11,13 +11,14 @@ ggplot(mpg, aes(x = cty, y = hwy))+
 # 미국 지역별 인구통계 정보를 담은 ggplot2 패키지의 midwest 데이터를 이용합니다
 # x 축은 poptotal(전체 인구), y 축은 popasian(아시아인 인구)으로 된 산점도를 만들어 보세요.
 # 전체 인구는 50 만 명 이하, 아시아인 인구는 1 만 명 이하인 지역만 산점도에 표시되게 설정하세요.
-midwest <- as.data.frame(midwest)
-
-ggplot(midwest, aes(x = poptotal, y = popasian))+
+mid <- as.data.frame(midwest)
+str(mid)
+ggplot(mid, aes(x = poptotal, y = popasian))+
   geom_point()+
   xlim(1,500000)+
-  ylim(1,10000)
-  
+  ylim(1,10000)+
+  labs(x="전체인구", y="아시아인구")
+
 
 
 
@@ -33,7 +34,7 @@ d1 <- mpg %>%
   arrange(desc(mean_cty)) %>%
   head(5)
 
-ggplot(d1, aes(x = reorder(manufacturer, -mean_cty), y = mean_cty)) + 
+ggplot(d1, aes(x = reorder(manufacturer, -mean_cty), y = mean_cty , fill = manufacturer)) + 
   geom_col()
  
   
@@ -45,7 +46,8 @@ ggplot(d1, aes(x = reorder(manufacturer, -mean_cty), y = mean_cty)) +
 # 자동차 종류별 빈도를 표현한 막대 그래프를 만들어 보세요.
 mpg
 
-ggplot(data = mpg, aes(x = class ) ) + geom_bar()
+ggplot(data = mpg, aes(x = class , fill = model) ) + geom_bar() + 
+  coord_polar(theta = "y")
 
 
 # Q5
@@ -53,12 +55,10 @@ ggplot(data = mpg, aes(x = class ) ) + geom_bar()
 # psavert(개인 저축률)가 시간에 따라서 어떻게 변해왔는지 알아보려고 합니다. 시간에 따른 psavert(개인 저축률)의 변화를
 # 나타낸 시계열 그래프를 만들어 보세요.
 
-economics <-  as.data.frame(economics)
+eco <-  as.data.frame(economics)
 
-economics
-
-economics %>%
-  group_by(psavert) %>%
+ggplot(eco, aes(x = date, y = psavert)) + 
+  geom_line()
   
 
 
@@ -70,6 +70,10 @@ economics %>%
 # 세 차종의 cty를 나타낸 상자 그림을 만들어 보세요.
 # 힌트: 파이프라인 추출
 
+mpg%>%
+  filter(class %in% c ("compact", "subcompact", "suv")) %>%
+  ggplot(aes(x = class, y = cty, color)) + 
+  geom_boxplot()
 
 
 
